@@ -1,49 +1,95 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Shut Up and Work</title>
-        <link rel="stylesheet" href="popup.css" />
-    </head>
-    <body>
-        <header class="header">
-            <h1 class="title">Shut Up and Work</h1>
-        </header>
-
-        <div class="form-group">
-            <label for="hours-worked">Hours Worked per Month</label>
-            <input
-                type="number"
-                id="hours-worked"
-                min="0"
-                step="0.5"
-                placeholder="Usually 160, but who's counting"
-            />
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shut Up and Work</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="card">
+    <div class="card-header">
+      <div class="title-container">
+        <h1 class="card-title">
+          <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="8" cy="8" r="6"></circle>
+            <path d="M18.09 10.37A6 6 0 1 1 10.34 18.1"></path>
+            <path d="m7 6 1 1"></path>
+            <path d="m16.71 13.88.7.71"></path>
+            <path d="m7.11 13.9 1.5-1.5"></path>
+          </svg>
+          Shut Up and Work
+        </h1>
+        <div class="dollar-badge">
+          <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="2" x2="12" y2="22"></line>
+            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+          </svg>
         </div>
+      </div>
+      <p class="card-description">Convert shopping into working hours!</p>
+    </div>
 
-        <div class="form-group">
-            <label for="monthly-salary">Monthly Salary</label>
-            <div class="input-wrapper">
-                <span class="currency-symbol" id="currency-symbol">$</span>
-                <input
-                    type="number"
-                    id="monthly-salary"
-                    min="0"
-                    step="100"
-                    placeholder="Hope this number is high!"
-                />
-            </div>
-        </div>
+    <div class="card-content">
+      <div class="input-group">
+        <label for="monthly-salary" class="input-label">
+          <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="2" x2="12" y2="22"></line>
+            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+          </svg>
+          Monthly Salary
+        </label>
+        <input
+          id="monthly-salary"
+          type="number"
+          placeholder="Hope this number’s high!"
+          class="input"
+        />
+      </div>
 
-        <div class="switch-container">
-            <span>Show prices as time</span>
-            <label class="switch">
-                <input type="checkbox" id="show-as-time" />
-                <span class="slider"></span>
-            </label>
-        </div>
+      <div class="input-group">
+        <label for="hours-per-month" class="input-label">
+          <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
+          Monthly Hours Worked
+        </label>
+        <input
+          id="hours-per-month"
+          type="number"
+          placeholder="Usually 160, but who’s counting?"
+          class="input"
+        />
+      </div>
 
-        <button class="button" id="save-button">Save</button>
-    </body>
+      <div id="hourly-rate" class="hourly-rate hidden">
+        Your time is worth $<span id="rate-value">0.00</span> per hour!
+      </div>
+
+      <div class="toggle-container">
+        <label for="display-mode" class="toggle-label">
+          Show prices as work time
+        </label>
+        <label class="switch">
+          <input type="checkbox" id="display-mode">
+          <span class="slider round"></span>
+        </label>
+      </div>
+    </div>
+
+    <div class="card-footer">
+      <button id="save-button" class="save-button">
+        <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+          <polyline points="17 21 17 13 7 13 7 21"></polyline>
+          <polyline points="7 3 7 8 15 8"></polyline>
+        </svg>
+        Save Settings
+      </button>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
 </html>
