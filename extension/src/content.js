@@ -1,3 +1,6 @@
+import { convertTime } from './utils.js';
+
+
 chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
   console.debug(
     "content.js - Message received in content.js:",
@@ -5,20 +8,24 @@ chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
   );
 })
 
-function addHiddenTimeElement(priceElement) {
+function addHiddenTimeElement(priceElement, hourlyRate) {
   const hiddenElement = document.createElement('span');
+  const aPrice = priceElement.querySelector('span[aria-hidden="true"]')
+  if (aPrice) {
+    const whole = aPrice.querySelector('.a-price-whole')?.textContent.replace('.', '') || '';
+    const fraction = aPrice.querySelector('.a-price-fraction')?.textContent || '';
+    const price = `${whole}.${fraction}`;
 
-  hiddenElement.setAttribute('aria-hidden', true);
-  hiddenElement.setAttribute('data-shut-up-and-work', true);
-  hiddenElement.style.display = 'none'
-  hiddenElement.textContent = "X days";
-  priceElement.appendChild(hiddenElement);
+    hiddenElement.setAttribute('aria-hidden', true);
+    hiddenElement.setAttribute('data-shut-up-and-work', true);
+    hiddenElement.style.display = 'none'
+    hiddenElement.textContent = convertTime(price / hourlyRate);
+    priceElement.appendChild(hiddenElement);
+  }
 }
 
 document.addEventListener("readystatechange", function () {
-  // alert("READY STATE CHANGED")
-  console.log("SENDING INIT MESSAGE");
-  chrome.runtime.sendMessage({ type: "FETCH_DATA" });
+  const hourlyRate = 25.0;
   const prices = document.querySelectorAll('.a-price');
 
   let showOriginal = true;
@@ -27,7 +34,7 @@ document.addEventListener("readystatechange", function () {
 
   prices.forEach((p) => {
     p.setAttribute('data-custom-toggle', 'false');
-    addHiddenTimeElement(p);
+    addHiddenTimeElement(p, hourlyRate);
   });
 
   // Function to toggle text

@@ -12,7 +12,7 @@ function convertTime(hours) {
     for (const unit of units) {
         if (hours >= unit.value) {
             const amount = hours / unit.value;
-            const display = unit.noDecimal ? Math.floor(amount) : (amount % 1 === 0 ? amount : amount.toFixed(2));
+            const display = unit.noDecimal ? Math.round(amount) : (amount % 1 === 0 ? amount : Number(amount.toFixed(2)));
             return `${display} ${unit.label}${display !== 1 ? 's' : ''}`;
         }
     }

@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Shut Up and Work",
   "description": "Ever wondered how many hours of your life that gadget costs? Now you can feel broke in real-time.",
-  "version": "1.0",
+  "version": "1.1",
   "icons": {
     "16": "images/icon-16.png",
     "32": "images/icon-32.png",
@@ -13,7 +13,7 @@
   "content_scripts": [
     {
       "matches": ["http://*/*", "https://*/*"],
-      "js": ["content.js"]
+      "js": ["dist/content.bundle.js"]
     }
   ],
   "action": {
