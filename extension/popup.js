@@ -1,3 +1,7 @@
+function sendMessageToServiceWorker(eventName, payload) {
+  return chrome.runtime.sendMessage({ type: eventName, payload });
+}
+
 document.addEventListener("DOMContentLoaded", function () {
   const salaryInput = document.getElementById("monthly-salary");
   const currencySymbol = document.getElementById("currency-symbol");
@@ -42,36 +46,37 @@ document.addEventListener("DOMContentLoaded", function () {
     const hoursWorked = document.getElementById("hours-worked").value;
     const monthlySalary = document.getElementById("monthly-salary").value;
     const showAsTime = document.getElementById("show-as-time").checked;
+      sendMessageToServiceWorker("INIT", {hoursWorked, monthlySalary, showAsTime })
 
-    chrome.storage.sync.set(
-      {
-        hoursWorked: hoursWorked,
-        monthlySalary: monthlySalary,
-        showAsTime: showAsTime,
-      },
-      function () {
-        updateCalculation();
-
-        const button = document.getElementById("save-button");
-        const originalText = button.textContent;
-        button.textContent = "Saved!";
-        setTimeout(() => {
-          button.textContent = originalText;
-        }, 1500);
-      },
-    );
+    // chrome.storage.sync.set(
+    //   {
+    //     hoursWorked: hoursWorked,
+    //     monthlySalary: monthlySalary,
+    //     showAsTime: showAsTime,
+    //   },
+    //   function () {
+    //     updateCalculation();
+    //
+    //     const button = document.getElementById("save-button");
+    //     const originalText = button.textContent;
+    //     button.textContent = "Saved!";
+    //     setTimeout(() => {
+    //       button.textContent = originalText;
+    //     }, 1500);
+    //   },
+    // );
   });
 
-  document
-    .getElementById("show-as-time")
-    .addEventListener("change", updateCalculation);
+  // document
+  //   .getElementById("show-as-time")
+  //   .addEventListener("change", updateCalculation);
 
-  document
-    .getElementById("hours-worked")
-    .addEventListener("input", updateCalculation);
-  document
-    .getElementById("monthly-salary")
-    .addEventListener("input", updateCalculation);
+  // document
+  //   .getElementById("hours-worked")
+  //   .addEventListener("input", updateCalculation);
+  // document
+  //   .getElementById("monthly-salary")
+  //   .addEventListener("input", updateCalculation);
 
   function updateCalculation() {
     const hoursWorked =
@@ -82,16 +87,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const resultElement = document.getElementById("calculation-result");
 
-    if (hoursWorked > 0 && monthlySalary > 0) {
-      const hourlyRate = monthlySalary / (hoursWorked * 4); // Assuming 4 weeks per month
-
-      if (showAsTime) {
-        resultElement.textContent = `Your time is worth approximately $${hourlyRate.toFixed(2)} per hour`;
-      } else {
-        resultElement.textContent = `You earn approximately $${hourlyRate.toFixed(2)} per hour`;
-      }
-    } else {
-      resultElement.textContent = "Enter your details to see calculations";
-    }
+    // if (hoursWorked > 0 && monthlySalary > 0) {
+    //   const hourlyRate = monthlySalary / (hoursWorked * 4); // Assuming 4 weeks per month
+    //
+    //   if (showAsTime) {
+    //     resultElement.textContent = `Your time is worth approximately $${hourlyRate.toFixed(2)} per hour`;
+    //   } else {
+    //     resultElement.textContent = `You earn approximately $${hourlyRate.toFixed(2)} per hour`;
+    //   }
+    // } else {
+    //   resultElement.textContent = "Enter your details to see calculations";
+    // }
   }
 });
