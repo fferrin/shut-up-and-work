@@ -4,6 +4,7 @@
 		"build": "webpack"
 	},
 	"devDependencies": {
+		"husky": "^8.0.0",
 		"jest": "^29.7.0",
 		"jest-environment-jsdom": "30.0.0-beta.3",
 		"webpack": "^5.99.9",
