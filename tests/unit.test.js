@@ -1,4 +1,4 @@
-const { convertTime } = require('../extension/utils');
+const { convertTime } = require('../extension/src/utils');
 
 describe('convertTime', () => {
     test.each([
@@ -6,6 +6,8 @@ describe('convertTime', () => {
         [4380, '6 months'],
         [168, '1 week'],
         [48, '2 days'],
+        [5.99938, '6 hours'],
+        [6.00001, '6 hours'],
         [1, '1 hour'],
         [0.5, '30 minutes'],
         [0.0001, 'less than a second'],
