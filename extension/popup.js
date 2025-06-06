@@ -2,9 +2,23 @@ function sendMessageToServiceWorker(eventName, payload) {
   return chrome.runtime.sendMessage({ type: eventName, payload });
 }
 
+function sendMessageToContentScript(eventName, payload) {
+  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    if (tabs[0]?.id) {
+      chrome.tabs.sendMessage(tabs[0].id, { type: eventName, payload });
+    }
+  });
+}
+
+
 document.addEventListener("DOMContentLoaded", function () {
   const salaryInput = document.getElementById("monthly-salary");
   const currencySymbol = document.getElementById("currency-symbol");
+  const toggle = document.getElementById("display-mode");
+
+  toggle.addEventListener("change", function () {
+    sendMessageToContentScript("toggleDisplayMode", this.checked);
+  });
 
   if (salaryInput.value && salaryInput.value.trim() !== "") {
     currencySymbol.classList.add("visible");
@@ -46,7 +60,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const hoursWorked = document.getElementById("hours-worked").value;
     const monthlySalary = document.getElementById("monthly-salary").value;
     const showAsTime = document.getElementById("show-as-time").checked;
-      sendMessageToServiceWorker("INIT", {hoursWorked, monthlySalary, showAsTime })
+    sendMessageToServiceWorker("INIT", {hoursWorked, monthlySalary, showAsTime })
 
     // chrome.storage.sync.set(
     //   {
