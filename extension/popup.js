@@ -113,4 +113,55 @@ document.addEventListener("DOMContentLoaded", function () {
     //   resultElement.textContent = "Enter your details to see calculations";
     // }
   }
+
+const hoursInput = document.getElementById('hours-per-month');
+const hourlyRateDiv = document.getElementById('hourly-rate');
+const rateValueSpan = document.getElementById('rate-value');
+
+function updateHourlyRate() {
+  const salary = parseFloat(salaryInput.value);
+  const hours = parseFloat(hoursInput.value);
+
+  if (!isNaN(salary) && !isNaN(hours) && hours > 0) {
+    const hourlyRate = salary / hours;
+    rateValueSpan.textContent = hourlyRate.toFixed(2);
+    hourlyRateDiv.classList.remove('hidden');
+  } else {
+    hourlyRateDiv.classList.add('hidden');
+  }
+}
+
+salaryInput.addEventListener('input', updateHourlyRate);
+hoursInput.addEventListener('input', updateHourlyRate);
+const saveButton = document.getElementById('save-button');
+
+saveButton.addEventListener('click', () => {
+  const salary = parseFloat(salaryInput.value);
+  const hours = parseFloat(hoursInput.value);
+  const displayMode = document.getElementById('display-mode').checked;
+
+  chrome.storage.local.set({
+    monthlySalary: salary,
+    hoursPerMonth: hours,
+    displayMode: displayMode
+  }, () => {
+    console.log('Settings saved');
+  });
+});
+function checkInputs() {
+  const salary = salaryInput.value.trim();
+  const hours = hoursInput.value.trim();
+
+  saveButton.disabled = salary === '' || hours === '';
+}
+
+salaryInput.addEventListener('input', () => {
+  updateHourlyRate();
+  checkInputs();
+});
+
+hoursInput.addEventListener('input', () => {
+  updateHourlyRate();
+  checkInputs();
+});
 });
