@@ -1,5 +1,5 @@
 
-function saveSettings(hoursWorked, monthlySalary, showAsTime) {
+async function saveSettings(hoursWorked, monthlySalary, showAsTime) {
     chrome.storage.local.set({
         hoursWorked,
         monthlySalary,
@@ -8,7 +8,7 @@ function saveSettings(hoursWorked, monthlySalary, showAsTime) {
     });
 }
 
-function loadSettings() {
+async function loadSettings() {
     return new Promise((resolve) => {
         chrome.storage.local.get(
             ["hoursWorked", "monthlySalary", "hourlyRate", "showAsTime"],
