@@ -11,16 +11,24 @@ function sendMessageToContentScript(eventName, payload) {
 }
 
 chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
+  const monthlySalaryInput = document.getElementById("monthly-salary");
+  const hoursPerMonthInput = document.getElementById("hours-per-month");
+  const displayModeInput = document.getElementById("display-mode");
+  const saveButton = document.getElementById("save-button");
+  const hourlyRateDiv = document.getElementById("hourly-rate");
+  const rateValueSpan = document.getElementById("rate-value");
+
   switch (msg.type) {
     case "FETCHED_DATA":
       const payload = msg.payload;
       if (payload.hourlyRate) {
-        document.getElementById("monthly-salary").value = payload.monthlySalary;
-        document.getElementById("hours-per-month").value = payload.hoursWorked;
-        document.getElementById("rate-value").textContent = payload.hourlyRate.toFixed(2);
-        document.getElementById("hourly-rate").classList.remove("hidden");
-        document.getElementById("display-mode").checked = payload.showAsTime;
-        document.getElementById('save-button').disabled = payload.hourlyRate === '';
+        monthlySalaryInput.value = payload.monthlySalary;
+        hoursPerMonthInput.value = payload.hoursWorked;
+        rateValueSpan.textContent = payload.hourlyRate.toFixed(2);
+        hourlyRateDiv.classList.remove("hidden");
+        displayModeInput.checked = payload.showAsTime;
+        saveButton.disabled = payload.hourlyRate === '';
+
         showPricesAsTime(payload.showAsTime);
         updatePrices(payload.hourlyRate);
       }
@@ -80,7 +88,13 @@ document.addEventListener("DOMContentLoaded", function () {
     const showAsTime = document.getElementById('display-mode').checked;
 
     sendMessageToServiceWorker("SAVE_DATA", { monthlySalary, hoursPerMonth, showAsTime });
+    const saveButtonText = saveButton.textContent;
+    saveButton.textContent = 'Saved!';
+    setTimeout(() => {
+      saveButton.textContent = saveButtonText;
+    }, 1000);
   });
+
   function checkInputs() {
     const salary = salaryInput.value.trim();
     const hours = hoursInput.value.trim();
