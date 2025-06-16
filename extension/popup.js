@@ -39,25 +39,7 @@ function updatePrices(hourlyRate) {
 document.addEventListener("DOMContentLoaded", function () {
   sendMessageToServiceWorker("FETCH_DATA")
   const salaryInput = document.getElementById("monthly-salary");
-  // const currencySymbol = document.getElementById("currency-symbol");
-
-  // if (salaryInput.value && salaryInput.value.trim() !== "") {
-  //   currencySymbol.classList.add("visible");
-  // }
-
-  // salaryInput.addEventListener("input", function () {
-  //   if (this.value && this.value.trim() !== "") {
-  //     currencySymbol.classList.add("visible");
-  //   } else {
-  //     currencySymbol.classList.remove("visible");
-  //   }
-  // });
-
-  // salaryInput.addEventListener("focus", function () {
-  //   if (this.value && this.value.trim() !== "") {
-  //     currencySymbol.classList.add("visible");
-  //   }
-  // });
+  const currencySymbol = document.getElementById("currency-symbol");
 
   document.getElementById("save-button").addEventListener("click", function () {
     const hoursPerMonth = document.getElementById("hours-per-month").value;
@@ -90,8 +72,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  salaryInput.addEventListener('input', updateHourlyRate);
-  hoursInput.addEventListener('input', updateHourlyRate);
   const saveButton = document.getElementById('save-button');
 
   saveButton.addEventListener('click', () => {
@@ -108,6 +88,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
     saveButton.disabled = salary === '' || hours === '';
   }
+
+  salaryInput.addEventListener("input", function () {
+    if (this.value.trim() !== "") {
+      currencySymbol.classList.add("visible")
+      this.classList.add("with-currency")
+    } else {
+      currencySymbol.classList.remove("visible")
+      this.classList.remove("with-currency")
+    }
+  })
 
   checkInputs();
   salaryInput.addEventListener('input', () => {

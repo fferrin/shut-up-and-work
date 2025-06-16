@@ -39,12 +39,15 @@
           </svg>
           Monthly Salary
         </label>
-        <input
-          id="monthly-salary"
-          type="number"
-          placeholder="Hope this number’s high!"
-          class="input"
-        />
+        <div class="input-container">
+          <span id="currency-symbol" class="currency-symbol">$</span>
+          <input
+            id="monthly-salary"
+            type="number"
+            placeholder="Hope this number’s high!"
+            class="input"
+          />
+        </div>
       </div>
 
       <div class="input-group">
@@ -58,7 +61,7 @@
         <input
           id="hours-per-month"
           type="number"
-          placeholder="Usually 160, but who's counting?"
+          placeholder="Usually 160, but who’s counting?"
           class="input"
         />
       </div>

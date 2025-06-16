@@ -91,6 +91,7 @@ body {
 }
 
 .input {
+  flex: 1;
   padding: 8px 12px;
   border: 1px solid #bbf7d0; /* green-200 */
   border-radius: 4px;
@@ -245,4 +246,29 @@ input:checked + .slider:before {
   color: #666;
   cursor: not-allowed;
   opacity: 0.6;
+}
+
+.input-container {
+  display: flex;
+  /* flex-direction: row; */
+  position: relative;
+  width: 100%;
+}
+
+.currency-symbol {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 0;
+  transition: opacity 0.2s;
+  pointer-events: none;
+}
+
+.currency-symbol.visible {
+  opacity: 1;
+}
+
+input.with-currency {
+  padding-left: 25px;
 }
