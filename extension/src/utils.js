@@ -20,4 +20,4 @@ function convertTime(hours) {
     return 'less than a second';
 }
 
-module.exports = { convertTime };
+export { convertTime };
