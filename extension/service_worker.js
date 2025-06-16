@@ -1,6 +1,8 @@
+import { loadSettings, saveSettings } from "./storage.js";
+
 const messageTypes = {
-    INIT: "INIT",
     FETCH_DATA: "FETCH_DATA",
+    SAVE_DATA: "SAVE_DATA",
 }
 
 function sendMessageToContent(eventName, payload) {
@@ -21,9 +23,22 @@ chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
     JSON.stringify(msg),
   );
   switch (msg.type) {
-    case messageTypes.INIT:
-      sendMessageToContent("LOGGED_IN");
+    case messageTypes.SAVE_DATA:
+      saveSettings(
+        parseFloat(msg.payload.hoursPerMonth),
+        parseFloat(msg.payload.monthlySalary),
+        msg.payload.showAsTime,
+      ).then(() => {
+        loadSettings()
+          .then((result) => {
+            sendMessageToPopup("FETCHED_DATA", result);
+          });
+      });
+      break;
     case messageTypes.FETCH_DATA:
-      sendMessageToContent("FETCHED_DATA", { hourlySalary: 1234 });
+      loadSettings().then((result) => {
+        sendMessageToPopup("FETCHED_DATA", result);
+      });
+      break;
   }
 })
