@@ -1,3 +1,5 @@
+import { convertTime } from './utils.js';
+
 function addHiddenTimeElement(priceElement) {
   const aPrice = priceElement.querySelector('span[aria-hidden="true"]')
 
@@ -34,4 +36,40 @@ function addHiddenTimeElement(priceElement) {
   }
 }
 
-export { addHiddenTimeElement };
+function togglePrices(showAsTime) {
+  const prices = document.querySelectorAll('.a-price');
+
+  prices.forEach((p, i) => {
+    if (showAsTime) {
+      p.querySelectorAll('span[aria-hidden="true"][data-shut-up-and-work]').forEach((el) => {
+        el.style.display = 'block';
+      })
+      p.querySelector('span[aria-hidden="true"]:not([data-shut-up-and-work])').style.display = 'none';
+    } else {
+      p.querySelectorAll('span[aria-hidden="true"]:not([data-shut-up-and-work])').forEach((el) => {
+        el.style.display = 'block';
+      })
+      p.querySelector('span[aria-hidden="true"][data-shut-up-and-work]').style.display = 'none';
+    }
+  });
+}
+
+function updatePrices(hourlyRate) {
+  const prices = document.querySelectorAll('span[data-original-final-price]');
+
+  prices.forEach((p) => {
+    const finalPrice = p.getAttribute('data-original-final-price')
+    p.textContent = convertTime(finalPrice / hourlyRate)
+  });
+}
+
+function addPriceTagElements() {
+  const prices = document.querySelectorAll('.a-price');
+
+  prices.forEach((p) => {
+    p.setAttribute('data-custom-toggle', 'false');
+    addHiddenTimeElement(p);
+  });
+}
+
+export { addHiddenTimeElement, togglePrices, updatePrices, addPriceTagElements };
