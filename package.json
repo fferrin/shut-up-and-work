@@ -1,12 +1,14 @@
 {
 	"scripts": {
-		"test": "jest",
+		"test": "vitest",
 		"build": "webpack"
 	},
+	"type": "module",
 	"devDependencies": {
 		"husky": "^8.0.0",
 		"jest": "^29.7.0",
 		"jest-environment-jsdom": "30.0.0-beta.3",
+		"vitest": "^3.2.3",
 		"webpack": "^5.99.9",
 		"webpack-cli": "^6.0.1"
 	}

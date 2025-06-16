@@ -17,7 +17,8 @@ function loadSettings() {
                     hoursWorked: result.hoursWorked,
                     monthlySalary: result.monthlySalary,
                     hourlyRate: result.hourlyRate,
-    });
+                    showAsTime: result.showAsTime,
+                });
             },
         );
     });
