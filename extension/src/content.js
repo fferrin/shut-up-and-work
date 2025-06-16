@@ -8,13 +8,17 @@ chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
   );
 
   switch (msg.type) {
-    case "toggleDisplayMode":
-      togglePrices(msg.payload);
+    case "HOURLY_RATE_UPDATED":
+      updatePrices(msg.payload.hourlyRate);
+      break;
+    case "SHOW_PRICES_AS_TIME":
+      togglePrices(msg.payload.show);
       break;
   }
 })
 
-function addHiddenTimeElement(priceElement, hourlyRate) {
+// function addHiddenTimeElement(priceElement, hourlyRate) {
+function addHiddenTimeElement(priceElement) {
   const aPrice = priceElement.querySelector('span[aria-hidden="true"]')
 
   if (aPrice) {
@@ -35,9 +39,11 @@ function addHiddenTimeElement(priceElement, hourlyRate) {
     label.style.color = '#16a34a';
 
     const timeValue = document.createElement('span');
+    timeValue.setAttribute("data-price-as-time", "");
     timeValue.setAttribute("data-original-price", price);
     timeValue.setAttribute("data-original-offscreen-price", original);
-    timeValue.textContent = convertTime(finalPrice / hourlyRate);
+    timeValue.setAttribute("data-original-final-price", finalPrice);
+    // timeValue.textContent = convertTime(finalPrice / hourlyRate);
     timeValue.style.fontSize = '24px';
     timeValue.style.fontWeight = 'bold';
     timeValue.style.color = '#16a34a';
@@ -47,6 +53,15 @@ function addHiddenTimeElement(priceElement, hourlyRate) {
 
     priceElement.appendChild(hiddenElement);
   }
+}
+
+function updatePrices(hourlyRate) {
+  const prices = document.querySelectorAll('span[data-original-final-price]');
+
+  prices.forEach((p) => {
+    const finalPrice = p.getAttribute('data-original-final-price')
+    p.textContent = convertTime(finalPrice / hourlyRate)
+  });
 }
 
 // Function to toggle text
@@ -68,16 +83,17 @@ function togglePrices(showAsTime) {
   });
 }
 
-document.addEventListener("readystatechange", function () {
-  const hourlyRate = 25.0;
+function addPriceTagElements() {
   const prices = document.querySelectorAll('.a-price');
-
-  let showOriginal = true;
-
-  const originalPrices = Array.from(prices).map(el => el.textContent);
 
   prices.forEach((p) => {
     p.setAttribute('data-custom-toggle', 'false');
-    addHiddenTimeElement(p, hourlyRate);
+    addHiddenTimeElement(p);
   });
+}
+
+document.addEventListener("readystatechange", function () {
+  if (document.readyState === "complete") {
+    addPriceTagElements();
+  }
 })

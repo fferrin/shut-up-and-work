@@ -21,10 +21,20 @@ chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
         document.getElementById("hourly-rate").classList.remove("hidden");
         document.getElementById("display-mode").checked = payload.showAsTime;
         document.getElementById('save-button').disabled = payload.hourlyRate === '';
+        showPricesAsTime(payload.showAsTime);
+        updatePrices(payload.hourlyRate);
       }
       break;
   }
 })
+
+function showPricesAsTime(show) {
+    sendMessageToContentScript("SHOW_PRICES_AS_TIME", { show });
+}
+
+function updatePrices(hourlyRate) {
+    sendMessageToContentScript("HOURLY_RATE_UPDATED", { hourlyRate });
+}
 
 document.addEventListener("DOMContentLoaded", function () {
   sendMessageToServiceWorker("FETCH_DATA")
@@ -59,6 +69,12 @@ document.addEventListener("DOMContentLoaded", function () {
   const hoursInput = document.getElementById('hours-per-month');
   const hourlyRateDiv = document.getElementById('hourly-rate');
   const rateValueSpan = document.getElementById('rate-value');
+  const showAsTime = document.getElementById('display-mode');
+
+  showAsTime.addEventListener('change', () => {
+    console.log('showAsTime', showAsTime.checked);
+    showPricesAsTime(showAsTime.checked);
+  });
 
   function updateHourlyRate() {
     const salary = parseFloat(salaryInput.value);
@@ -66,6 +82,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (!isNaN(salary) && !isNaN(hours) && hours > 0) {
       const hourlyRate = salary / hours;
+      updatePrices(hourlyRate);
       rateValueSpan.textContent = hourlyRate.toFixed(2);
       hourlyRateDiv.classList.remove('hidden');
     } else {
