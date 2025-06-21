@@ -13,7 +13,8 @@
   "content_scripts": [
     {
       "matches": ["http://*/*", "https://*/*"],
-      "js": ["dist/content.bundle.js"]
+      "js": ["dist/content.bundle.js"],
+      "run_at": "document_start"
     }
   ],
   "action": {

@@ -32,12 +32,16 @@ chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
         loadSettings()
           .then((result) => {
             sendMessageToPopup("FETCHED_DATA", result);
+            sendMessageToContent("HOURLY_RATE_UPDATED", { hourlyRate: result.hourlyRate });
+            sendMessageToContent("SHOW_PRICES_AS_TIME", { show: result.showAsTime });
           });
       });
       break;
     case messageTypes.FETCH_DATA:
       loadSettings().then((result) => {
         sendMessageToPopup("FETCHED_DATA", result);
+        sendMessageToContent("HOURLY_RATE_UPDATED", { hourlyRate: result.hourlyRate });
+        sendMessageToContent("SHOW_PRICES_AS_TIME", { show: result.showAsTime });
       });
       break;
   }

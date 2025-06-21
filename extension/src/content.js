@@ -1,5 +1,9 @@
 import { addPriceTagElements, togglePrices, updatePrices } from './dom.js';
 
+function sendMessageToServiceWorker(eventName, payload) {
+  return chrome.runtime.sendMessage({ type: eventName, payload });
+}
+
 chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
   console.debug(
     "content.js - Message received in content.js:",
@@ -17,7 +21,6 @@ chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
 })
 
 document.addEventListener("readystatechange", function () {
-  if (document.readyState === "complete") {
-    addPriceTagElements();
-  }
+  addPriceTagElements();
+  sendMessageToServiceWorker("FETCH_DATA")
 })
