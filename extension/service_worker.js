@@ -1,20 +1,9 @@
 import { loadSettings, saveSettings } from "./storage.js";
+import { sendMessageToContent, sendMessageToPopup } from "./messaging.js";
 
 const messageTypes = {
     FETCH_DATA: "FETCH_DATA",
     SAVE_DATA: "SAVE_DATA",
-}
-
-function sendMessageToContent(eventName, payload) {
-  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-    if (tabs[0]?.id) {
-      chrome.tabs.sendMessage(tabs[0].id, { type: eventName, payload });
-    }
-  });
-}
-
-function sendMessageToPopup(eventName, payload) {
-  chrome.runtime.sendMessage({ type: eventName, payload });
 }
 
 chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {

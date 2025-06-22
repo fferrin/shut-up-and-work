@@ -20,7 +20,11 @@
   "action": {
     "default_icon": "images/icon-16.png",
     "default_title": "Shut Up and Work",
-    "default_popup": "popup.html"
+    "default_popup": "popup.html",
+    "default_popup_script": {
+      "script": "popup.js",
+      "type": "module"
+    }
   },
   "background": {
     "service_worker": "service_worker.js",

@@ -1,14 +1,4 @@
-function sendMessageToServiceWorker(eventName, payload) {
-  return chrome.runtime.sendMessage({ type: eventName, payload });
-}
-
-function sendMessageToContentScript(eventName, payload) {
-  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-    if (tabs[0]?.id) {
-      chrome.tabs.sendMessage(tabs[0].id, { type: eventName, payload });
-    }
-  });
-}
+import { sendMessageToServiceWorker, sendMessageToContent } from "./messaging.js";
 
 chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
   const monthlySalaryInput = document.getElementById("monthly-salary");
@@ -37,11 +27,11 @@ chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
 })
 
 function showPricesAsTime(show) {
-    sendMessageToContentScript("SHOW_PRICES_AS_TIME", { show });
+    sendMessageToContent("SHOW_PRICES_AS_TIME", { show });
 }
 
 function updatePrices(hourlyRate) {
-    sendMessageToContentScript("HOURLY_RATE_UPDATED", { hourlyRate });
+    sendMessageToContent("HOURLY_RATE_UPDATED", { hourlyRate });
 }
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -103,15 +93,15 @@ document.addEventListener("DOMContentLoaded", function () {
     saveButton.disabled = salary === '' || hours === '';
   }
 
-  salaryInput.addEventListener("input", function () {
-    if (this.value.trim() !== "") {
+  function addCurrencySymbol() {
+    if (salaryInput.value.trim() !== "") {
       currencySymbol.classList.add("visible")
-      this.classList.add("with-currency")
+      salaryInput.classList.add("with-currency")
     } else {
       currencySymbol.classList.remove("visible")
-      this.classList.remove("with-currency")
+      salaryInput.classList.remove("with-currency")
     }
-  })
+  }
 
   checkInputs();
   salaryInput.addEventListener('input', () => {
