@@ -1,4 +1,4 @@
-import { convertTime } from '../extension/src/utils';
+import { convertTime, parsePrice } from '../extension/src/utils';
 import { describe, it, expect } from 'vitest';
 
 describe('convertTime', () => {
@@ -15,5 +15,17 @@ describe('convertTime', () => {
         [0, 'less than a second']
     ])('converts %p hours to %p', (input, expected) => {
         expect(convertTime(input)).toBe(expected);
+    });
+});
+
+describe('parsePrice', () => {
+    it.each([
+        [10, 10],
+        ['10', 10],
+        ['10.00', 10],
+        [10.00, 10],
+        ['1,999.00', 1999],
+    ])('converts %p to %p', (input, expected) => {
+        expect(parsePrice(input)).toBe(expected);
     });
 });

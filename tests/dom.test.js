@@ -4,6 +4,7 @@ import { addHiddenTimeElement, togglePrices, updatePrices, addPriceTagElements }
 describe('Amazon website', () => {
   const hourlyRate = 60;
   const expectedPrices = [
+    { price: '1,999.00', asTime: '1.39 days' },
     { price: '120.00', asTime: '2 hours' },
     { price: '60.00', asTime: '1 hour' },
     { price: '1.00', asTime: '1 minute' },

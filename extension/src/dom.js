@@ -1,4 +1,4 @@
-import { convertTime } from './utils.js';
+import { convertTime, parsePrice } from './utils.js';
 
 function addHiddenTimeElement(priceElement) {
   const aPrice = priceElement.querySelector('span[aria-hidden="true"]');
@@ -73,7 +73,7 @@ function updatePrices(hourlyRate) {
 
   prices.forEach((p) => {
     const finalPrice = p.getAttribute('data-original-final-price');
-    p.textContent = convertTime(finalPrice / hourlyRate);
+    p.textContent = convertTime(parsePrice(finalPrice) / hourlyRate);
   });
 }
 

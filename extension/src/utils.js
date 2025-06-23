@@ -1,3 +1,10 @@
+function parsePrice(price) {
+  if (typeof price === 'string') {
+    return parseFloat(price.replace(',', ''));
+  }
+  return price;
+}
+
 function convertTime(hours) {
   const units = [
     { label: 'year', value: 24 * 365, noDecimal: true },
@@ -24,4 +31,4 @@ function convertTime(hours) {
   return 'less than a second';
 }
 
-export { convertTime };
+export { convertTime, parsePrice };
