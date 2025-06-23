@@ -4,7 +4,8 @@
 		"type-check": "tsc --noEmit",
 		"lint": "eslint 'extension/src/**/*.{js,ts}'",
 		"format": "prettier --write 'extension/src/**/*.{js,ts,json,css,md}'",
-		"build": "webpack"
+		"build": "webpack",
+		"release": "zip -r extension.zip extension"
 	},
 	"type": "module",
 	"jest": {
