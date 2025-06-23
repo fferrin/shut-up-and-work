@@ -72,19 +72,19 @@ document.addEventListener("DOMContentLoaded", function () {
   const hoursInput = document.getElementById('hours-per-month');
   const hourlyRateDiv = document.getElementById('hourly-rate');
   const rateValueSpan = document.getElementById('rate-value');
-  const showAsTime = document.getElementById('display-mode');
+  const showAsTimeInput = document.getElementById('display-mode');
   const saveButton = document.getElementById("save-button");
 
   sendMessageToServiceWorker("FETCH_DATA")
 
-  showAsTime.addEventListener('change', () => {
-    showPricesAsTime(showAsTime.checked);
+  showAsTimeInput.addEventListener('change', () => {
+    showPricesAsTime(showAsTimeInput.checked);
   });
 
   saveButton.addEventListener('click', () => {
     const monthlySalary = parseFloat(salaryInput.value);
     const hoursPerMonth = parseFloat(hoursInput.value);
-    const showAsTime = showAsTime.checked;
+    const showAsTime = showAsTimeInput.checked;
 
     sendMessageToServiceWorker("SAVE_DATA", { monthlySalary, hoursPerMonth, showAsTime });
     const saveButtonText = saveButton.textContent;
