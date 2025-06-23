@@ -18,6 +18,8 @@ chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
 });
 
 document.addEventListener('readystatechange', function () {
-  addPriceTagElements();
-  sendMessageToServiceWorker('FETCH_DATA');
+  if (document.readyState === 'interactive') {
+    addPriceTagElements();
+    sendMessageToServiceWorker('FETCH_DATA');
+  }
 });
