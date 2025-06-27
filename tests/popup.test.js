@@ -117,7 +117,7 @@ describe('updateHourlyRate', () => {
 
     expect(rateValueSpan.textContent).toBe('25.00');
     expect(hourlyRateDiv.classList.contains('hidden')).toBe(false);
-    expect(updatePriceCallback).toHaveBeenCalledWith(25);
+    expect(updatePriceCallback).toHaveBeenCalledWith(25, 8, 5);
   });
 
   test('hides hourlyRateDiv when salary is invalid', () => {

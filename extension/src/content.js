@@ -9,7 +9,11 @@ chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
 
   switch (msg.type) {
     case 'HOURLY_RATE_UPDATED':
-      updatePrices(msg.payload.hourlyRate);
+      updatePrices(
+        msg.payload.hourlyRate,
+        msg.payload.hoursPerDay,
+        msg.payload.daysPerWeek,
+      );
       break;
     case 'SHOW_PRICES_AS_TIME':
       togglePrices(msg.payload.show);

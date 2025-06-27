@@ -68,7 +68,7 @@ function togglePrices(showAsTime) {
   });
 }
 
-function updatePrices(hourlyRate, hoursPerDay = 24, daysPerWeek = 7) {
+function updatePrices(hourlyRate, hoursPerDay, daysPerWeek) {
   const prices = document.querySelectorAll('span[data-original-final-price]');
 
   prices.forEach((p) => {

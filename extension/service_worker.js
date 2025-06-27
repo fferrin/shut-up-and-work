@@ -14,14 +14,20 @@ chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
   switch (msg.type) {
     case messageTypes.SAVE_DATA:
       saveSettings(
-        parseFloat(msg.payload.hoursPerMonth),
         parseFloat(msg.payload.monthlySalary),
+        parseFloat(msg.payload.hoursPerDay),
+        parseFloat(msg.payload.daysPerWeek),
         msg.payload.showAsTime,
       ).then(() => {
         loadSettings()
           .then((result) => {
+            console.debug("service_worker - Settings saved and loaded:", result);
             sendMessageToPopup("FETCHED_DATA", result);
-            sendMessageToContent("HOURLY_RATE_UPDATED", { hourlyRate: result.hourlyRate });
+            sendMessageToContent("HOURLY_RATE_UPDATED", {
+              hourlyRate: result.hourlyRate,
+              hoursPerDay: result.hoursPerDay,
+              daysPerWeek: result.daysPerWeek,
+            });
             sendMessageToContent("SHOW_PRICES_AS_TIME", { show: result.showAsTime });
           });
       });
@@ -29,7 +35,11 @@ chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
     case messageTypes.FETCH_DATA:
       loadSettings().then((result) => {
         sendMessageToPopup("FETCHED_DATA", result);
-        sendMessageToContent("HOURLY_RATE_UPDATED", { hourlyRate: result.hourlyRate });
+        sendMessageToContent("HOURLY_RATE_UPDATED", {
+          hourlyRate: result.hourlyRate,
+          hoursPerDay: result.hoursPerDay,
+          daysPerWeek: result.daysPerWeek,
+        });
         sendMessageToContent("SHOW_PRICES_AS_TIME", { show: result.showAsTime });
       });
       break;
