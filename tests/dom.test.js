@@ -2,13 +2,20 @@ import { beforeEach, describe, it, expect } from 'vitest';
 import { addHiddenTimeElement, togglePrices, updatePrices, addPriceTagElements } from '../extension/src/dom';
 
 describe('Amazon website', () => {
-  const hourlyRate = 60;
+  const hourlyRate = 50;
+  const hoursPerDay = 8;
+  const daysPerWeek = 5;
+
   const expectedPrices = [
-    { price: '1,999.00', asTime: '1.39 days' },
-    { price: '120.00', asTime: '2 hours' },
-    { price: '60.00', asTime: '1 hour' },
-    { price: '1.00', asTime: '1 minute' },
-    { price: '0.50', asTime: '30 seconds' }
+    { price: '1,999.00', asTime: '1 week' },
+    { price: '1,250.00', asTime: '3.13 days' },
+    { price: '120.00', asTime: '2.4 hours' },
+    { price: '100.00', asTime: '2 hours' },
+    { price: '60.00', asTime: '1.2 hours' },
+    { price: '50.00', asTime: '1 hour' },
+    { price: '1.00', asTime: '1.2 minutes' },
+    { price: '0.83', asTime: '1 minute' },
+    { price: '0.60', asTime: '43.2 seconds' },
   ];
 
   beforeEach(() => {
@@ -77,7 +84,7 @@ describe('Amazon website', () => {
     });
 
     it('updates text content based on hourlyRate', () => {
-      updatePrices(hourlyRate);
+      updatePrices(hourlyRate, hoursPerDay, daysPerWeek);
 
       document.querySelectorAll('span[data-original-final-price]').forEach((el, i) => {
         expect(el.textContent).toBe(expectedPrices[i].asTime);

@@ -68,12 +68,12 @@ function togglePrices(showAsTime) {
   });
 }
 
-function updatePrices(hourlyRate) {
+function updatePrices(hourlyRate, hoursPerDay = 24, daysPerWeek = 7) {
   const prices = document.querySelectorAll('span[data-original-final-price]');
 
   prices.forEach((p) => {
     const finalPrice = p.getAttribute('data-original-final-price');
-    p.textContent = convertTime(parsePrice(finalPrice) / hourlyRate);
+    p.textContent = convertTime(parsePrice(finalPrice) / hourlyRate, hoursPerDay, daysPerWeek);
   });
 }
 
