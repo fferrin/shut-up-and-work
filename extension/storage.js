@@ -1,24 +1,22 @@
 
-async function saveSettings(hoursWorked, monthlySalary, showAsTime, hoursPerDay, daysPerWeek) {
+async function saveSettings(monthlySalary, hoursPerDay, daysPerWeek, showAsTime) {
     chrome.storage.local.set({
-        hoursWorked,
         monthlySalary,
-        hourlyRate: monthlySalary / hoursWorked,
-        showAsTime,
+        hourlyRate: monthlySalary / (hoursPerDay * daysPerWeek * 4),
         hoursPerDay,
         daysPerWeek,
+        showAsTime,
     });
 }
 
 async function loadSettings() {
     return new Promise((resolve) => {
         chrome.storage.local.get(
-            ["hoursWorked", "monthlySalary", "hourlyRate", "hoursPerDay", "daysPerWeek", "showAsTime"],
+            ["hourlyRate", "monthlySalary", "hoursPerDay", "daysPerWeek", "showAsTime"],
             function (result) {
                 resolve({
-                    hoursWorked: result.hoursWorked,
-                    monthlySalary: result.monthlySalary,
                     hourlyRate: result.hourlyRate,
+                    monthlySalary: result.monthlySalary,
                     hoursPerDay: result.hoursPerDay,
                     daysPerWeek: result.daysPerWeek,
                     showAsTime: result.showAsTime,

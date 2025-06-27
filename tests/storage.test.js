@@ -14,37 +14,22 @@ describe('storage', () => {
     });
 
     it('saveSettings stores correct values', () => {
-        saveSettings(160, 3200, true, 8, 5);
+        saveSettings(3200, 8, 5, true);
 
         expect(chrome.storage.local.set).toHaveBeenCalledWith({
-            hoursWorked: 160,
             monthlySalary: 3200,
-            hourlyRate: 3200 / 160,
-            showAsTime: true,
+            hourlyRate: 3200 / (8 * 5 * 4), // Assuming 4 weeks in a month
             hoursPerDay: 8,
             daysPerWeek: 5,
-        });
-    });
-
-    it('Backward compatibility: saveSettings stores correct values', () => {
-        saveSettings(160, 3200, true);
-
-        expect(chrome.storage.local.set).toHaveBeenCalledWith({
-            hoursWorked: 160,
-            monthlySalary: 3200,
-            hourlyRate: 3200 / 160,
             showAsTime: true,
-            hoursPerDay: undefined,
-            daysPerWeek: undefined,
         });
     });
 
     it('loadSettings retrieves and resolves settings', async () => {
         chrome.storage.local.get.mockImplementation((keys, callback) => {
             callback({
-                hoursWorked: 160,
-                monthlySalary: 3200,
                 hourlyRate: 20,
+                monthlySalary: 3200,
                 hoursPerDay: 8,
                 daysPerWeek: 5,
                 showAsTime: true,
@@ -54,36 +39,11 @@ describe('storage', () => {
         const settings = await loadSettings();
 
         expect(settings).toEqual({
-            hoursWorked: 160,
-            monthlySalary: 3200,
             hourlyRate: 20,
+            monthlySalary: 3200,
             hoursPerDay: 8,
             daysPerWeek: 5,
             showAsTime: true,
-        });
-    });
-
-    it('Backward compatibility: loadSettings retrieves and resolves settings', async () => {
-        chrome.storage.local.get.mockImplementation((keys, callback) => {
-            callback({
-                hoursWorked: 160,
-                monthlySalary: 3200,
-                hourlyRate: 20,
-                showAsTime: true,
-                hoursPerDay: undefined,
-                daysPerWeek: undefined,
-            });
-        });
-
-        const settings = await loadSettings();
-
-        expect(settings).toEqual({
-            hoursWorked: 160,
-            monthlySalary: 3200,
-            hourlyRate: 20,
-            showAsTime: true,
-            hoursPerDay: undefined,
-            daysPerWeek: undefined,
         });
     });
 });
