@@ -51,18 +51,38 @@
       </div>
 
       <div class="input-group">
-        <label for="hours-per-month" class="input-label">
+        <label for="hours-per-day" class="input-label">
           <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="12" cy="12" r="10"></circle>
             <polyline points="12 6 12 12 16 14"></polyline>
           </svg>
-          Monthly Hours Worked
+          Hours Worked Per Day
         </label>
         <input
-          id="hours-per-month"
+          id="hours-per-day"
           type="number"
-          placeholder="Usually 160, but who’s counting?"
+          placeholder="Usually 8, but who’s counting?"
           class="input"
+          min=1
+          max=24
+        />
+      </div>
+
+      <div class="input-group">
+        <label for="days-per-week" class="input-label">
+          <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
+          Hours Worked Per Day
+        </label>
+        <input
+          id="days-per-week"
+          type="number"
+          placeholder="Usually 8, but who’s counting?"
+          class="input"
+          min=1
+          max=24
         />
       </div>
 

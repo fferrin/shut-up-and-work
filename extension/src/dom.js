@@ -73,7 +73,11 @@ function updatePrices(hourlyRate, hoursPerDay = 24, daysPerWeek = 7) {
 
   prices.forEach((p) => {
     const finalPrice = p.getAttribute('data-original-final-price');
-    p.textContent = convertTime(parsePrice(finalPrice) / hourlyRate, hoursPerDay, daysPerWeek);
+    p.textContent = convertTime(
+      parsePrice(finalPrice) / hourlyRate,
+      hoursPerDay,
+      daysPerWeek,
+    );
   });
 }
 

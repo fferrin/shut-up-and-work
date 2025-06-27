@@ -18,19 +18,21 @@ function toggleCurrencySymbol(monthlySalaryInput, currencySymbolDiv) {
   }
 }
 
-function checkInputs(salaryInput, hoursInput, saveButton) {
+function checkInputs(salaryInput, hoursPerDayInput, daysPerWeekInput, saveButton) {
   const salary = salaryInput.value.trim();
-  const hours = hoursInput.value.trim();
+  const hoursPerDay = hoursPerDayInput.value.trim();
+  const daysPerWeek = daysPerWeekInput.value.trim();
 
-  saveButton.disabled = salary === '' || hours === '';
+  saveButton.disabled = salary === '' || hoursPerDay === '' || daysPerWeek === '';
 }
 
-function updateHourlyRate(salaryInput, hoursInput, rateValueSpan, hourlyRateDiv, updatePriceCallback) {
+function updateHourlyRate(salaryInput, hoursPerDayInput, daysPerWeekInput, rateValueSpan, hourlyRateDiv, updatePriceCallback) {
   const salary = parseFloat(salaryInput.value);
-  const hours = parseFloat(hoursInput.value);
+  const hoursPerDay = parseFloat(hoursPerDayInput.value);
+  const daysPerWeek = parseFloat(daysPerWeekInput.value);
 
-  if (!isNaN(salary) && !isNaN(hours) && hours > 0) {
-    const hourlyRate = salary / hours;
+  if (!isNaN(salary) && !isNaN(hoursPerDay) && hoursPerDay > 0 && !isNaN(daysPerWeek) && daysPerWeek > 0) {
+    const hourlyRate = salary / (hoursPerDay * daysPerWeek * 4);
     updatePriceCallback(hourlyRate);
     rateValueSpan.textContent = hourlyRate.toFixed(2);
     hourlyRateDiv.classList.remove('hidden');
@@ -41,7 +43,7 @@ function updateHourlyRate(salaryInput, hoursInput, rateValueSpan, hourlyRateDiv,
 
 chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
   const monthlySalaryInput = document.getElementById("monthly-salary");
-  const hoursPerMonthInput = document.getElementById("hours-per-month");
+  // const hoursPerMonthInput = document.getElementById("hours-per-month");
   const displayModeInput = document.getElementById("display-mode");
   const saveButton = document.getElementById("save-button");
   const currencySymbol = document.getElementById("currency-symbol");
@@ -53,7 +55,7 @@ chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
       const payload = msg.payload;
       if (payload.hourlyRate) {
         monthlySalaryInput.value = payload.monthlySalary;
-        hoursPerMonthInput.value = payload.hoursWorked;
+        // hoursPerMonthInput.value = payload.hoursWorked;
         rateValueSpan.textContent = payload.hourlyRate.toFixed(2);
         hourlyRateDiv.classList.remove("hidden");
         displayModeInput.checked = payload.showAsTime;
@@ -69,13 +71,14 @@ chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
 
 document.addEventListener("DOMContentLoaded", function () {
   const salaryInput = document.getElementById("monthly-salary");
-  const hoursInput = document.getElementById('hours-per-month');
+  const hoursPerDayInput = document.getElementById('hours-per-day');
+  const daysPerWeekInput = document.getElementById('days-per-week');
   const hourlyRateDiv = document.getElementById('hourly-rate');
   const rateValueSpan = document.getElementById('rate-value');
   const showAsTimeInput = document.getElementById('display-mode');
   const saveButton = document.getElementById("save-button");
 
-  sendMessageToServiceWorker("FETCH_DATA")
+  // sendMessageToServiceWorker("FETCH_DATA")
 
   showAsTimeInput.addEventListener('change', () => {
     showPricesAsTime(showAsTimeInput.checked);
@@ -83,7 +86,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   saveButton.addEventListener('click', () => {
     const monthlySalary = parseFloat(salaryInput.value);
-    const hoursPerMonth = parseFloat(hoursInput.value);
+    const hoursPerMonth = parseFloat(hoursPerDayInput.value);
     const showAsTime = showAsTimeInput.checked;
 
     sendMessageToServiceWorker("SAVE_DATA", { monthlySalary, hoursPerMonth, showAsTime });
@@ -95,13 +98,24 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   salaryInput.addEventListener('input', () => {
-    updateHourlyRate(salaryInput, hoursInput, rateValueSpan, hourlyRateDiv, updatePrices);
-    checkInputs(salaryInput, hoursInput, saveButton);
+    updateHourlyRate(salaryInput, hoursPerDayInput, daysPerWeekInput,rateValueSpan, hourlyRateDiv, updatePrices);
+    checkInputs(salaryInput, hoursPerDayInput, daysPerWeekInput, saveButton);
   });
 
-  hoursInput.addEventListener('input', () => {
-    updateHourlyRate(salaryInput, hoursInput, rateValueSpan, hourlyRateDiv, updatePrices);
-    checkInputs(salaryInput, hoursInput, saveButton);
+  hoursPerDayInput.addEventListener('input', () => {
+    const min = Number(hoursPerDayInput.min);
+    const max = Number(hoursPerDayInput.max);
+    hoursPerDayInput.value = Math.min(Math.max(hoursPerDayInput.value, min), max);
+    updateHourlyRate(salaryInput, hoursPerDayInput, daysPerWeekInput,rateValueSpan, hourlyRateDiv, updatePrices);
+    checkInputs(salaryInput, hoursPerDayInput, daysPerWeekInput, saveButton);
+  });
+
+  daysPerWeekInput.addEventListener('input', () => {
+    const min = Number(daysPerWeekInput.min);
+    const max = Number(daysPerWeekInput.max);
+    daysPerWeekInput.value = Math.min(Math.max(daysPerWeekInput.value, min), max);
+    updateHourlyRate(salaryInput, hoursPerDayInput, daysPerWeekInput,rateValueSpan, hourlyRateDiv, updatePrices);
+    checkInputs(salaryInput, hoursPerDayInput, daysPerWeekInput, saveButton);
   });
 });
 
